@@ -17,7 +17,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-smallrye-health:'
+    implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     testImplementation 'io.quarkus:quarkus-jdbc-h2'
