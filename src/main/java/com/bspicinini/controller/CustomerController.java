@@ -30,8 +30,6 @@ public class CustomerController {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public List<CustomerResponse> getAllCustomers() {
         return customerService.findAllCustomers().stream()
                 .map(mapper::toResponse)
@@ -40,16 +38,12 @@ public class CustomerController {
 
     @GET
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public CustomerResponse getCustomerById(@PathParam("id") Long id) {
         var customerDto = customerService.findCustomerById(id);
         return mapper.toResponse(customerDto);
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createCustomer(CustomerInput customerInput) {
         var customerDto = customerService.createCustomer(customerInput);
         return Response.status(Response.Status.CREATED).entity(mapper.toResponse(customerDto)).build();
