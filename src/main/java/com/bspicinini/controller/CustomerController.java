@@ -2,6 +2,9 @@ package com.bspicinini.controller;
 
 import java.util.List;
 
+import com.bspicinini.controller.input.CustomerInput;
+import com.bspicinini.controller.response.CustomerResponse;
+import com.bspicinini.mapper.CustomerMapper;
 import com.bspicinini.service.CustomerService;
 
 import jakarta.ws.rs.Consumes;
@@ -20,38 +23,36 @@ import jakarta.ws.rs.core.Response;
 public class CustomerController {
 
     private CustomerService customerService;
+    private CustomerMapper mapper;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, CustomerMapper mapper) {
         this.customerService = customerService;
+        this.mapper = mapper;
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public List<CustomerResponse> getAllCustomers() {
         return customerService.findAllCustomers().stream()
-                .map(customer -> new CustomerResponse(customer.id(), customer.name(), customer.email()))
+                .map(mapper::toResponse)
                 .toList();
     }
 
     @GET
     @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public CustomerResponse getCustomerById(@PathParam("id") Long id) {
         var customerDto = customerService.findCustomerById(id);
-        return new CustomerResponse(customerDto.id(), customerDto.name(), customerDto.email());
+        return mapper.toResponse(customerDto);
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createCustomer(CustomerInput customerInput) {
         var customerDto = customerService.createCustomer(customerInput);
-        return Response.status(Response.Status.CREATED).entity(new CustomerResponse(customerDto.id(), customerDto.name(), customerDto.email())).build();
+        return Response.status(Response.Status.CREATED).entity(mapper.toResponse(customerDto)).build();
     }
-
-    @DELETE
-    @Path("/{id}")
-    public Response deleteCustomer(@PathParam("id") Long id) {
-        customerService.deleteCustomer(id);
-        return Response.noContent().build();
-    }
-
-    public record CustomerResponse(Long id, String name, String email) {}
-    public record CustomerInput(String name, String email) {}
 }

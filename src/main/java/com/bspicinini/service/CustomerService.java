@@ -1,12 +1,14 @@
 package com.bspicinini.service;
 
-import com.bspicinini.controller.CustomerController.CustomerInput;
+import com.bspicinini.controller.input.CustomerInput;
 import com.bspicinini.mapper.CustomerMapper;
 import com.bspicinini.repository.CustomerRepository;
 import com.bspicinini.repository.entity.Customer;
 import com.bspicinini.service.dto.CustomerDto;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,13 +32,10 @@ public class CustomerService {
         return CustomerMapper.INSTANCE.toDto(customer);
     }
 
+    @Transactional
     public CustomerDto createCustomer(CustomerInput customerInput) {
         Customer customer = CustomerMapper.INSTANCE.toEntity(customerInput);
         customerRepository.persist(customer);
         return CustomerMapper.INSTANCE.toDto(customer);
-    }
-
-    public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
     }
 }

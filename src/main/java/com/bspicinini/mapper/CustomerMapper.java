@@ -1,7 +1,8 @@
 package com.bspicinini.mapper;
 
-import com.bspicinini.controller.CustomerController.CustomerInput;
 import com.bspicinini.config.MapStructConfig;
+import com.bspicinini.controller.input.CustomerInput;
+import com.bspicinini.controller.response.CustomerResponse;
 import com.bspicinini.repository.entity.Customer;
 import com.bspicinini.service.dto.CustomerDto;
 
@@ -14,4 +15,5 @@ public interface CustomerMapper {
 
     Customer toEntity(CustomerInput input);
     CustomerDto toDto(Customer customer);
+    CustomerResponse toResponse(CustomerDto dto);
 }

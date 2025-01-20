@@ -14,7 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @Liveness
 @ApplicationScoped
 public class DatabaseHealthCheck implements HealthCheck {
-    
+
     private DataSource dataSource;
 
     public DatabaseHealthCheck(DataSource dataSource) {

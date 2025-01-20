@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.bspicinini.controller.input.PaymentInput;
 import com.bspicinini.controller.response.PaymentResponse;
+import com.bspicinini.mapper.PaymentMapper;
 import com.bspicinini.service.PaymentService;
 
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -22,36 +22,38 @@ import jakarta.ws.rs.core.Response;
 public class PaymentController {
 
     private PaymentService paymentService;
-    
-    public PaymentController(PaymentService paymentService) {
+    private PaymentMapper mapper;
+
+    public PaymentController(PaymentService paymentService, PaymentMapper mapper) {
         this.paymentService = paymentService;
+        this.mapper = mapper;
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public List<PaymentResponse> getAllPayments() {
         return paymentService.findAllPayments().stream()
-                .map(payment -> new PaymentResponse(payment.id(), payment.amount(), payment.paymentDate()))
+                .map(mapper::toResponse)
                 .toList();
     }
 
     @GET
     @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public PaymentResponse getPaymentById(@PathParam("id") Long id) {
         var paymentDto = paymentService.findPaymentById(id);
-        return new PaymentResponse(paymentDto.id(), paymentDto.amount(), paymentDto.paymentDate());
+        return mapper.toResponse(paymentDto);
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createPayment(PaymentInput paymentInput) {
-
         var paymentDto = paymentService.createPayment(paymentInput);
-        return Response.status(Response.Status.CREATED).entity(new PaymentResponse(paymentDto.id(), paymentDto.amount(), paymentDto.paymentDate())).build();
+        return Response.status(Response.Status.CREATED)
+                .entity(mapper.toResponse(paymentDto)).build();
     }
 
-    @DELETE
-    @Path("/{id}")
-    public Response deletePayment(@PathParam("id") Long id) {
-        paymentService.deletePayment(id);
-        return Response.noContent().build();
-    }
 }

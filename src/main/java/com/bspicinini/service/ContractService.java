@@ -4,9 +4,13 @@ import com.bspicinini.controller.input.ContractInput;
 import com.bspicinini.mapper.ContractMapper;
 import com.bspicinini.repository.ContractRepository;
 import com.bspicinini.repository.entity.Contract;
+import com.bspicinini.repository.entity.ContractStatusEnum;
+import com.bspicinini.repository.entity.Customer;
 import com.bspicinini.service.dto.ContractDto;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,13 +34,39 @@ public class ContractService {
         return ContractMapper.INSTANCE.toDto(contract);
     }
 
+    @Transactional
     public ContractDto createContract(ContractInput contractInput) {
         Contract contract = ContractMapper.INSTANCE.toEntity(contractInput);
+        var customer = new Customer();
+        customer.setId(contractInput.customerId());
+        contract.setCustomer(customer);
+        contract.setOriginContracts(contractInput.originContractIds().stream()
+                .map(id -> {
+                    var originContract = new Contract();
+                    originContract.setId(id);
+                    return originContract;
+                })
+                .collect(Collectors.toList()));
+        
+        contract.setStatus(ContractStatusEnum.ACTIVE);
         contractRepository.persist(contract);
+
+        if(contract.getOriginContracts().isEmpty()) {
+           List<Contract> originContracts = contractRepository.findByIdIn(contract.getOriginContracts().stream().map(Contract::getId).toList());
+           originContracts.forEach(originContract -> {
+               originContract.setStatus(ContractStatusEnum.RENEGOTIATED);
+               originContract.setDerivedContract(contract);
+               contractRepository.persist(originContract);
+           });
+        }
+
         return ContractMapper.INSTANCE.toDto(contract);
     }
 
+    @Transactional
     public void deleteContract(Long id) {
-        contractRepository.deleteById(id);
+        var contract = contractRepository.findById(id);
+        contract.setStatus(ContractStatusEnum.CANCELED);
+        contractRepository.persist(contract);
     }
 }

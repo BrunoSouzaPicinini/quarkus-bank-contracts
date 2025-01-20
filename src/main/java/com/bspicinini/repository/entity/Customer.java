@@ -1,12 +1,18 @@
 package com.bspicinini.repository.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.OneToMany;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class Customer {
@@ -16,8 +22,18 @@ public class Customer {
     @SequenceGenerator(name = "customer_seq", sequenceName = "customer_sequence", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String email;
+
+    @CreationTimestamp
+    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "customer")
     private List<Contract> contracts;
@@ -46,6 +62,22 @@ public class Customer {
         this.email = email;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public List<Contract> getContracts() {
         return contracts;
     }
@@ -53,6 +85,5 @@ public class Customer {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
-
    
 }

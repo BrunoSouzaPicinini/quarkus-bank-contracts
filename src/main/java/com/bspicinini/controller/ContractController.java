@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bspicinini.controller.input.ContractInput;
 import com.bspicinini.controller.response.ContractResponse;
+import com.bspicinini.mapper.ContractMapper;
 import com.bspicinini.service.ContractService;
 
 import jakarta.ws.rs.Consumes;
@@ -22,34 +23,42 @@ import jakarta.ws.rs.core.Response;
 public class ContractController {
 
     private ContractService contractService;
+    private ContractMapper mapper;
 
-    public ContractController(ContractService contractService) {
+    public ContractController(ContractService contractService, ContractMapper mapper) {
         this.contractService = contractService;
+        this.mapper = mapper;
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public List<ContractResponse> getAllContracts() {
         return contractService.findAllContracts().stream()
-                .map(contract -> new ContractResponse(contract.id(), contract.contractNumber(), contract.amount()))
+                .map(mapper::toResponse)
                 .toList();
     }
 
     @GET    
     @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public ContractResponse getContractById(@PathParam("id") Long id) {
         var contractDto = contractService.findContractById(id);
-        return new ContractResponse(contractDto.id(), contractDto.contractNumber(), contractDto.amount());
+        return mapper.toResponse(contractDto);
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createContract(ContractInput contractInput) {
-        ContractInput input = new ContractInput(contractInput.contractNumber(), contractInput.amount());
-        var contractDto = contractService.createContract(input);
-        return Response.status(Response.Status.CREATED).entity(new ContractResponse(contractDto.id(), contractDto.contractNumber(), contractDto.amount())).build();
+        var contractDto = contractService.createContract(contractInput);
+        return Response.status(Response.Status.CREATED).entity(mapper.toResponse(contractDto)).build();
     }
 
     @DELETE
     @Path("/{id}")
+    
     public Response deleteContract(@PathParam("id") Long id) {
         contractService.deleteContract(id);
         return Response.noContent().build();
