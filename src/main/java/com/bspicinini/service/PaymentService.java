@@ -44,7 +44,7 @@ public class PaymentService {
         payment.setContract(contract);
 
         paymentRepository.persist(payment);
-        return mapper.toDto(paymentRepository.findById(payment.getId()));
+        return mapper.toDto(payment);
     }
 
 }

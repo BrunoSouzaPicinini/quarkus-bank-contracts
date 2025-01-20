@@ -1,3 +1,5 @@
 package com.bspicinini.service.dto;
 
-public record CustomerDto(Long id, String name, String email) {}
+import java.time.LocalDateTime;
+
+public record CustomerDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {}

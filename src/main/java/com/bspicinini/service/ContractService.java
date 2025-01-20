@@ -51,7 +51,7 @@ public class ContractService {
         contract.setStatus(ContractStatusEnum.ACTIVE);
         contractRepository.persist(contract);
 
-        if(contract.getOriginContracts().isEmpty()) {
+        if(!contract.getOriginContracts().isEmpty()) {
            List<Contract> originContracts = contractRepository.findByIdIn(contract.getOriginContracts().stream().map(Contract::getId).toList());
            originContracts.forEach(originContract -> {
                originContract.setStatus(ContractStatusEnum.RENEGOTIATED);
@@ -59,7 +59,7 @@ public class ContractService {
                contractRepository.persist(originContract);
            });
         }
-
+        
         return ContractMapper.INSTANCE.toDto(contract);
     }
 
