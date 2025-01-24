@@ -30,17 +30,16 @@ public class CustomerController {
     }
 
     @GET
-    public List<CustomerResponse> getAllCustomers() {
-        return customerService.findAllCustomers().stream()
+    public Response getAllCustomers() {
+        return Response.ok(customerService.findAllCustomers().stream()
                 .map(mapper::toResponse)
-                .toList();
+                .toList()).build();
     }
 
     @GET
     @Path("/{id}")
-    public CustomerResponse getCustomerById(@PathParam("id") Long id) {
-        var customerDto = customerService.findCustomerById(id);
-        return mapper.toResponse(customerDto);
+    public Response getCustomerById(@PathParam("id") Long id) {
+        return Response.ok(mapper.toResponse(customerService.findCustomerById(id))).build();
     }
 
     @POST
