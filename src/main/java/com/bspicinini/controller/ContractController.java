@@ -33,19 +33,18 @@ public class ContractController {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ContractResponse> getAllContracts() {
-        return contractService.findAllContracts().stream()
+    public Response getAllContracts() {
+        return Response.ok(contractService.findAllContracts().stream()
                 .map(mapper::toResponse)
-                .toList();
+                .toList()).build();
     }
 
     @GET    
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ContractResponse getContractById(@PathParam("id") Long id) {
-        var contractDto = contractService.findContractById(id);
-        return mapper.toResponse(contractDto);
+    public Response getContractById(@PathParam("id") Long id) {
+        return Response.ok(mapper.toResponse(contractService.findContractById(id))).build();
     }
 
     @POST
@@ -58,7 +57,6 @@ public class ContractController {
 
     @DELETE
     @Path("/{id}")
-    
     public Response deleteContract(@PathParam("id") Long id) {
         contractService.deleteContract(id);
         return Response.noContent().build();

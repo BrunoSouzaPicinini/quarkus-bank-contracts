@@ -32,19 +32,18 @@ public class PaymentController {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PaymentResponse> getAllPayments() {
-        return paymentService.findAllPayments().stream()
+    public Response getAllPayments() {
+        return Response.ok(paymentService.findAllPayments().stream()
                 .map(mapper::toResponse)
-                .toList();
+                .toList()).build();
     }
 
     @GET
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public PaymentResponse getPaymentById(@PathParam("id") Long id) {
-        var paymentDto = paymentService.findPaymentById(id);
-        return mapper.toResponse(paymentDto);
+    public Response getPaymentById(@PathParam("id") Long id) {
+        return Response.ok(mapper.toResponse(paymentService.findPaymentById(id))).build();
     }
 
     @POST
