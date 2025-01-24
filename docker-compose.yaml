@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres
+    container_name: bank_contracts_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: desenvolvedor4321
+      POSTGRES_DB: bank_contracts
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
