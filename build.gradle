@@ -20,8 +20,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    implementation 'io.quarkus:quarkus-logging-json'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-    testImplementation 'io.quarkus:quarkus-jdbc-h2'
+//    comment the h2 dependency to use with testcontainers
+//    testImplementation 'io.quarkus:quarkus-jdbc-h2'
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }

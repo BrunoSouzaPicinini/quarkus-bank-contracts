@@ -40,18 +40,21 @@ public class ContractService {
         var customer = new Customer();
         customer.setId(contractInput.customerId());
         contract.setCustomer(customer);
-        contract.setOriginContracts(contractInput.originContractIds().stream()
-                .map(id -> {
-                    var originContract = new Contract();
-                    originContract.setId(id);
-                    return originContract;
-                })
-                .collect(Collectors.toList()));
-        
+
+        if(contractInput.originContractIds() != null){
+            contract.setOriginContracts(contractInput.originContractIds().stream()
+                    .map(id -> {
+                        var originContract = new Contract();
+                        originContract.setId(id);
+                        return originContract;
+                    })
+                    .collect(Collectors.toList()));
+        }
+
         contract.setStatus(ContractStatusEnum.ACTIVE);
         contractRepository.persist(contract);
 
-        if(!contract.getOriginContracts().isEmpty()) {
+        if(contract.getOriginContracts() != null && !contract.getOriginContracts().isEmpty()) {
            List<Contract> originContracts = contractRepository.findByIdIn(contract.getOriginContracts().stream().map(Contract::getId).toList());
            originContracts.forEach(originContract -> {
                originContract.setStatus(ContractStatusEnum.RENEGOTIATED);

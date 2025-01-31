@@ -28,6 +28,9 @@ public interface ContractMapper {
 
     @Named("getOriginContractId")
     default List<Long> getOriginContractId(List<Contract> originContracts) {
+        if(originContracts == null) {
+            return null;
+        }
         return originContracts.stream().map(Contract::getId).toList();
     }
 }
