@@ -1,12 +1,8 @@
 package com.bspicinini.controller;
 
-import java.util.List;
-
 import com.bspicinini.controller.input.CustomerInput;
-import com.bspicinini.controller.response.CustomerResponse;
 import com.bspicinini.mapper.CustomerMapper;
 import com.bspicinini.service.CustomerService;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;

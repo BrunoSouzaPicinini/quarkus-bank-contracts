@@ -1,12 +1,8 @@
 package com.bspicinini.controller;
 
-import java.util.List;
-
 import com.bspicinini.controller.input.PaymentInput;
-import com.bspicinini.controller.response.PaymentResponse;
 import com.bspicinini.mapper.PaymentMapper;
 import com.bspicinini.service.PaymentService;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -30,8 +26,6 @@ public class PaymentController {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPayments() {
         return Response.ok(paymentService.findAllPayments().stream()
                 .map(mapper::toResponse)
@@ -40,15 +34,11 @@ public class PaymentController {
 
     @GET
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getPaymentById(@PathParam("id") Long id) {
         return Response.ok(mapper.toResponse(paymentService.findPaymentById(id))).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createPayment(PaymentInput paymentInput) {
         var paymentDto = paymentService.createPayment(paymentInput);
         return Response.status(Response.Status.CREATED)

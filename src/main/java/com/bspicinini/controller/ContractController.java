@@ -1,12 +1,8 @@
 package com.bspicinini.controller;
 
-import java.util.List;
-
 import com.bspicinini.controller.input.ContractInput;
-import com.bspicinini.controller.response.ContractResponse;
 import com.bspicinini.mapper.ContractMapper;
 import com.bspicinini.service.ContractService;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -31,8 +27,6 @@ public class ContractController {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllContracts() {
         return Response.ok(contractService.findAllContracts().stream()
                 .map(mapper::toResponse)
@@ -41,15 +35,11 @@ public class ContractController {
 
     @GET    
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getContractById(@PathParam("id") Long id) {
         return Response.ok(mapper.toResponse(contractService.findContractById(id))).build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createContract(ContractInput contractInput) {
         var contractDto = contractService.createContract(contractInput);
         return Response.status(Response.Status.CREATED).entity(mapper.toResponse(contractDto)).build();
