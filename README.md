@@ -65,3 +65,34 @@ If you want to learn more about building native executables, please consult <htt
 - REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
 - REST Client ([guide](https://quarkus.io/guides/rest-client)): Call REST services
 - JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+
+
+
+## Running in WSL 2 + Podman
+
+If you are using Testcontainers, you might need to configure it to use Podman. You can do this by setting the DOCKER_HOST environment variable to point to the Podman socket. Add the following to your environment variables:
+```
+export DOCKER_HOST=unix:///run/user/$(id -u)/podman/podman.sock
+```
+
+Check Docker Configuration File: Ensure that the Docker configuration file exists at /home/bruno/.docker/config.json. If it does not exist, you can create it by running:
+```
+mkdir -p /home/bruno/.docker
+touch /home/bruno/.docker/config.json
+```
+Add this content
+```
+echo '{
+  "auths": {},
+  "HttpHeaders": {
+    "User-Agent": "Docker-Client/20.10.7 (linux)"
+  }
+}' > /home/bruno/.docker/config.json
+```
+
+Set Environment Variable: If you have a custom Docker authentication configuration, you can set the DOCKER_AUTH_CONFIG environment variable to point to your configuration file:
+
+```
+export DOCKER_AUTH_CONFIG=/home/bruno/.docker/config.json
+```
+
