@@ -1,8 +1,23 @@
 # quarkus-bank-contracts
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project was created for learning quarkus as goal.
+The scope of project is a contract of credit bank simplified 
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+The main goal is create an implementation of each common integration made in this type of system.
+
+Objectives:
+- Create a CRUD 
+- Database integration
+- Client HTTP request
+- Schedule some process with cron
+- Consume from kafka topic
+- Produce to kafka topic
+- Write in DB the DLT events
+- Send an email
+
+
+## System Diagram 
+<a href="https://drive.google.com/file/d/1yzobVBsF3mvwEApqZeG8SiMfSSJdX7gU/view?usp=sharing">Draw.io diagram</a> 
 
 ## Running the application in dev mode
 
