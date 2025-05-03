@@ -19,21 +19,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 
-@Entity
+@Entity(name = "contracts")
 public class Contract {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contract_seq")
     @SequenceGenerator(name = "contract_seq", sequenceName = "contract_sequence", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     private BigDecimal amount;
-    @Column(nullable = false)
-    private Integer installments;
-
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "customer_id")
-    private Customer customer;
+    @Column(nullable = false, name="number_of_installments")
+    private Integer numberOfInstallments;
 
     @OneToMany(mappedBy = "derivedContract")
     private List<Contract> originContracts;
@@ -42,8 +38,12 @@ public class Contract {
     @JoinColumn(name = "derived_contract_id") 
     private Contract derivedContract;
 
+    @ManyToOne
+    @JoinColumn(name = "origin_renegociation_id")
+    private Renegociation originRenegociation;
+
     @OneToMany(mappedBy = "contract")
-    private List<Payment> payments;
+    private List<Installment> installments;
 
     @CreationTimestamp
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
@@ -57,84 +57,101 @@ public class Contract {
     @Enumerated(EnumType.STRING)
     private ContractStatusEnum status;
 
-    public Long getId() {
-        return id;
-    }
+	@ManyToOne
+    @JoinColumn(nullable = false, name = "customer_offers_id")
+    private CustomerOffer customerOffers;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+	public BigDecimal getAmount() {
+		return amount;
+	}
 
-    public Integer getInstallments() {
-        return installments;
-    }
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
 
-    public void setInstallments(Integer installments) {
-        this.installments = installments;
-    }
+	public Integer getNumberOfInstallments() {
+		return numberOfInstallments;
+	}
 
-    public Customer getCustomer() {
-        return customer;
-    }
+	public void setNumberOfInstallments(Integer numberOfInstallments) {
+		this.numberOfInstallments = numberOfInstallments;
+	}
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+	public List<Contract> getOriginContracts() {
+		return originContracts;
+	}
 
-    public List<Contract> getOriginContracts() {
-        return originContracts;
-    }
+	public void setOriginContracts(List<Contract> originContracts) {
+		this.originContracts = originContracts;
+	}
 
-    public void setOriginContracts(List<Contract> originContracts) {
-        this.originContracts = originContracts;
-    }
+	public Contract getDerivedContract() {
+		return derivedContract;
+	}
 
-    public Contract getDerivedContract() {
-        return derivedContract;
-    }
+	public void setDerivedContract(Contract derivedContract) {
+		this.derivedContract = derivedContract;
+	}
 
-    public void setDerivedContract(Contract derivedContract) {
-        this.derivedContract = derivedContract;
-    }
+	public Renegociation getOriginRenegociation() {
+		return originRenegociation;
+	}
 
-    public List<Payment> getPayments() {
-        return payments;
-    }
+	public void setOriginRenegociation(Renegociation renegociation) {
+		this.originRenegociation = renegociation;
+	}
 
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
+	public List<Installment> getInstallments() {
+		return installments;
+	}
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+	public void setInstallments(List<Installment> installments) {
+		this.installments = installments;
+	}
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
 
-    public ContractStatusEnum getStatus() {
-        return status;
-    }
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 
-    public void setStatus(ContractStatusEnum status) {
-        this.status = status;
-    }
+	public ContractStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(ContractStatusEnum status) {
+		this.status = status;
+	}
+
+	public CustomerOffer getCustomerOffers() {
+		return customerOffers;
+	}
+
+	public void setCustomerOffers(CustomerOffer customerOffers) {
+		this.customerOffers = customerOffers;
+	}
     
+	public static Contract withId(Long id) {
+		var contract = new Contract();
+		contract.setId(id);
+		return contract;
+	}
 }

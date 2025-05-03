@@ -1,5 +1,7 @@
 package com.bspicinini.controller;
 
+import java.time.LocalDate;
+
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.bspicinini.client.SelicTaxClient;
@@ -23,7 +25,10 @@ public class SelicController {
 	
 	@GET
 	public Response getSelicAnualTaxToday(){
-		var now = java.time.LocalDate.now();
+
+		//TODO if is weekend or holiday, get the last business day
+		//the bacen returns 404 if the date is weekend or holiday
+		var now = LocalDate.now();
 		return Response.ok(selicTaxClient.getSelicAnualTaxByBetweenDates(now, now)).build();
 	}
 }

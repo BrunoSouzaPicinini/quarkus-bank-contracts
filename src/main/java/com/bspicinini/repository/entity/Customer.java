@@ -14,7 +14,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
+@Entity (name = "customers")
 public class Customer {
 
     @Id
@@ -37,6 +37,8 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Contract> contracts;
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerOffer> customerOffers;
 
     public Long getId() {
         return id;

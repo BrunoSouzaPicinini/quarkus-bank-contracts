@@ -15,7 +15,7 @@ public interface PaymentMapper {
     PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
 
     Payment toEntity(PaymentInput input);
-    @Mapping(target = "contractId", source = "contract.id")
+    @Mapping(target = "installmentId", source = "installment.id")
     PaymentDto toDto(Payment payment);
     PaymentResponse toResponse(PaymentDto dto);
 }

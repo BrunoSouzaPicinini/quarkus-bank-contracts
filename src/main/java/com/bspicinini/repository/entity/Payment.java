@@ -15,7 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 
-@Entity
+@Entity(name = "payments")
 public class Payment {
 
     @Id
@@ -34,8 +34,8 @@ public class Payment {
     @Column(nullable = false, name = "updated_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "contract_id")
-    private Contract contract;
+    @JoinColumn(nullable = false, name = "installment_id")
+    private Installment installment;
 
     public Long getId() {
         return id;
@@ -77,12 +77,12 @@ public class Payment {
         this.updatedAt = updatedAt;
     }
 
-    public Contract getContract() {
-        return contract;
+    public Installment getInstallment() {
+        return installment;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setInstallment(Installment installment) {
+        this.installment = installment;
     }
 
 }
