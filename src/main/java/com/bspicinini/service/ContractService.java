@@ -73,7 +73,7 @@ public class ContractService {
         }
         contract.setCustomerOffers(customerOffer);
 
-        generateInstallments(contract, customerOffer);
+        generateInstallments(contract, customerOffer.getOffer().getMinDownPaymentPercentage());
 
         if (contractInput.originContractIds() != null) {
             contract.setOriginContracts(contractInput.originContractIds().stream()
@@ -105,7 +105,7 @@ public class ContractService {
         if(minDownPaymentPercentage.compareTo(BigDecimal.ZERO) == 1){
             installmentNumberCounter ++;
             Installment downPaymentInstallment = new Installment();
-            minDownPayment = minDownPaymentPercentage.multiply(contract.getAmount()).divide(new BigDecimal(100))
+            minDownPayment = minDownPaymentPercentage.multiply(contract.getAmount()).divide(new BigDecimal(100));
             downPaymentInstallment.setBaseValue(minDownPayment);
 	        downPaymentInstallment.setInstallmentNumber(installmentNumberCounter);
 	        downPaymentInstallment.setDueDate(LocalDateTime.now().plusDays(4));

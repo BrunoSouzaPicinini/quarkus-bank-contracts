@@ -45,8 +45,7 @@ class ContractControllerTest {
         var contract = new Contract();
         contract.setStatus(ContractStatusEnum.ACTIVE);
         contract.setAmount(BigDecimal.valueOf(1000.0));
-        contract.setInstallments(12);
-        contract.setCustomer(customer);
+        contract.setNumberOfInstallments(12);
         contractRepository.persist(contract);
     }
 

@@ -18,8 +18,7 @@ public interface ContractMapper {
     ContractMapper INSTANCE = Mappers.getMapper(ContractMapper.class);
 
     Contract toEntity(ContractInput input);
-
-    @Mapping(target = "customerId", source = "customer.id")
+    
     @Mapping(target = "originContractIds", source = "originContracts", qualifiedByName = "getOriginContractId")
     @Mapping(target = "derivedContractId", source = "derivedContract.id")
     ContractDto toDto(Contract contract);
