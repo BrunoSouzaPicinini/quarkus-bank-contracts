@@ -62,16 +62,17 @@ public class ContractService {
     @Transactional
     public ContractDto createContract(ContractInput contractInput) {
         Contract contract = ContractMapper.INSTANCE.toEntity(contractInput);
-
-        var renegociation = renegociationRepository.findById(contractInput.renegociationId());
-        if (renegociation != null) {
-            contract.setOriginRenegociation(renegociation);
+        if(contractInput.renegociationId() != null) {
+            var renegociation = renegociationRepository.findById(contractInput.renegociationId());
+            if (renegociation != null) {
+                contract.setOriginRenegociation(renegociation);
+            }
         }
         var customerOffer = customerOffersRepository.findById(contractInput.customerOfferId());
         if (customerOffer == null) {
             throw new BusinessException("Customer offer not found");
         }
-        contract.setCustomerOffers(customerOffer);
+        contract.setCustomerOffer(customerOffer);
 
         generateInstallments(contract, customerOffer.getOffer().getMinDownPaymentPercentage());
 
@@ -113,14 +114,14 @@ public class ContractService {
             installments.add(downPaymentInstallment);
         }
         if(minDownPaymentPercentage.compareTo(new BigDecimal(100)) < 0) {
-            Integer remainingInstallments = contract.getNumberOfInstallments() - installmentNumberCounter;
+            int remainingInstallments = contract.getNumberOfInstallments() - installmentNumberCounter;
             BigDecimal remainingEachInstallmentValue = (contract.getAmount().subtract(minDownPayment)).divide(new BigDecimal(remainingInstallments),2, RoundingMode.HALF_EVEN);
             var nextDuePlusMonths = 0L;
             LocalDateTime dueDate = LocalDateTime.now();
             for (int i = 0; i < remainingInstallments; i++) {
                 installmentNumberCounter++;
                 nextDuePlusMonths++;
-                dueDate.plusMonths(nextDuePlusMonths);
+                dueDate = dueDate.plusMonths(nextDuePlusMonths);
                 Installment installment = new Installment();
                 installment.setBaseValue(remainingEachInstallmentValue);
                 installment.setInstallmentNumber(installmentNumberCounter);

@@ -21,6 +21,8 @@ public interface ContractMapper {
     
     @Mapping(target = "originContractIds", source = "originContracts", qualifiedByName = "getOriginContractId")
     @Mapping(target = "derivedContractId", source = "derivedContract.id")
+    @Mapping(target = "originRenegociationId", source = "originRenegociation.id")
+    @Mapping(target = "customerOfferId", source = "customerOffer.id")
     ContractDto toDto(Contract contract);
 
     ContractResponse toResponse(ContractDto dto);

@@ -36,8 +36,6 @@ public class Customer {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "customer")
-    private List<Contract> contracts;
-    @OneToMany(mappedBy = "customer")
     private List<CustomerOffer> customerOffers;
 
     public Long getId() {
@@ -80,12 +78,7 @@ public class Customer {
         this.updatedAt = updatedAt;
     }
 
-    public List<Contract> getContracts() {
-        return contracts;
+    public List<CustomerOffer> getCustomerOffers() {
+        return customerOffers;
     }
-
-    public void setContracts(List<Contract> contracts) {
-        this.contracts = contracts;
-    }
-   
 }

@@ -4,4 +4,5 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ContractResponse(Long id, BigDecimal amount, Integer installments, Long customerId, List<Long> originContractIds, Long derivedContractId, LocalDateTime createdAt, LocalDateTime updatedAt, String status) {}
+//TODO change to show installments generated
+public record ContractResponse(Long id, Long customerOfferId, BigDecimal amount, Integer numberOfInstallments, List<Long> originContractIds, Long derivedContractId, Long originRenegociationId, LocalDateTime createdAt, LocalDateTime updatedAt, String status) {}

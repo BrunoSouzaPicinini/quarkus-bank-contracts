@@ -59,7 +59,7 @@ public class Contract {
 
 	@ManyToOne
     @JoinColumn(nullable = false, name = "customer_offers_id")
-    private CustomerOffer customerOffers;
+    private CustomerOffer customerOffer;
 
 	public Long getId() {
 		return id;
@@ -141,12 +141,12 @@ public class Contract {
 		this.status = status;
 	}
 
-	public CustomerOffer getCustomerOffers() {
-		return customerOffers;
+	public CustomerOffer getCustomerOffer() {
+		return customerOffer;
 	}
 
-	public void setCustomerOffers(CustomerOffer customerOffers) {
-		this.customerOffers = customerOffers;
+	public void setCustomerOffer(CustomerOffer customerOffers) {
+		this.customerOffer = customerOffers;
 	}
     
 	public static Contract withId(Long id) {
